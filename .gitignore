@@ -2,3 +2,6 @@
 lib*
 # ignore object files
 *.o
+*.htm
+*.sdf
+*.opensdf
