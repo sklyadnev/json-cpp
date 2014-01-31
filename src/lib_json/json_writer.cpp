@@ -73,6 +73,18 @@ std::string valueToString( UInt value )
 
 std::string valueToString( double value )
 {
+#if defined(_MSC_VER) && _MSC_VER >= 1800
+	std::string result = std::to_string(value);
+	if (result.find_first_of('.') != std::string::npos)
+	{
+		for (
+			auto it = result.rbegin();
+			it != result.rend() && *it == '0' && *(it + 1) == '0';
+			it = std::string::reverse_iterator(result.erase(--it.base()))
+		);
+	}
+	return result;
+#else
    char buffer[32];
 #if defined(_MSC_VER) && defined(__STDC_SECURE_LIB__) // Use secure version with visual studio 2005 to avoid warning. 
    sprintf_s(buffer, sizeof(buffer), "%#.16g", value); 
@@ -108,6 +120,7 @@ std::string valueToString( double value )
      }
    }
    return buffer;
+#endif
 }
 
 
